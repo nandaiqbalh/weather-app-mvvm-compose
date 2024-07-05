@@ -1,4 +1,4 @@
-package com.nandaiqbalh.weatherapp
+package com.nandaiqbalh.weatherapp.presentation.home
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.nandaiqbalh.weatherapp.ui.theme.WeatherAppTheme
+import com.nandaiqbalh.weatherapp.presentation.ui.theme.WeatherAppTheme
 
 class MainActivity : ComponentActivity() {
 	private val viewModel by viewModels<MainViewModel>()

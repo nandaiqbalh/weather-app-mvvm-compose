@@ -1,4 +1,4 @@
-package com.nandaiqbalh.weatherapp
+package com.nandaiqbalh.weatherapp.presentation.home
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
