@@ -61,7 +61,6 @@ dependencies {
 	implementation(libs.androidx.ui)
 	implementation(libs.androidx.ui.graphics)
 	implementation(libs.androidx.ui.tooling.preview)
-	implementation(libs.androidx.material3)
 	testImplementation(libs.junit)
 	androidTestImplementation(libs.androidx.junit)
 	androidTestImplementation(libs.androidx.espresso.core)
@@ -69,6 +68,9 @@ dependencies {
 	androidTestImplementation(libs.androidx.ui.test.junit4)
 	debugImplementation(libs.androidx.ui.tooling)
 	debugImplementation(libs.androidx.ui.test.manifest)
+
+	// material 3
+	implementation("androidx.compose.material3:material3:1.2.0-rc01")
 
 	//Splash Api
 	implementation("androidx.core:core-splashscreen:1.0.1")
@@ -85,7 +87,7 @@ dependencies {
 
 	//Retrofit
 	implementation("com.squareup.retrofit2:retrofit:2.9.0")
-	implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+	implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
 	//Coil
 	implementation("io.coil-kt:coil-compose:2.4.0")

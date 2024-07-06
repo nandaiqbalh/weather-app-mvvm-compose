@@ -18,14 +18,14 @@ import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
 	background = Black,
-	primary = Blue,
+	primary = BlueDark,
 	error = DarkRed,
-	surface = LightBlack
+	surface = DarkGray
 )
 
 private val LightColorScheme = lightColorScheme(
 	background = Color.White,
-	primary = Blue,
+	primary = BlueLight,
 	error = LightRed,
 	surface = Color.White
 )
@@ -60,3 +60,5 @@ fun WeatherAppTheme(
 		content = content
 	)
 }
+
+

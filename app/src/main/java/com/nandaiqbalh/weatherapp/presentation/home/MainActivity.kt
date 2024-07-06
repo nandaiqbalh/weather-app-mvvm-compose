@@ -1,56 +1,56 @@
 package com.nandaiqbalh.weatherapp.presentation.home
 
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.nandaiqbalh.weatherapp.presentation.home.components.MainView
 import com.nandaiqbalh.weatherapp.presentation.ui.theme.WeatherAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-	private val viewModel by viewModels<MainViewModel>()
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+    private val viewModel: MainViewModel by viewModels()
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
-		installSplashScreen().apply {
-			setKeepOnScreenCondition {
-				viewModel.splashCondition.value
-			}
-		}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) {
+            viewModel.getWeatherForecast()
+        }
+        permissionLauncher.launch(arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        ))
 
-		WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-		setContent {
-			WeatherAppTheme {
-				// A surface container using the 'background' color from the theme
+        setContent {
+            WeatherAppTheme {
 
-				val isSystemInDarkMode = isSystemInDarkTheme()
-				val systemController = rememberSystemUiController()
+                val isSystemInDarkMode = isSystemInDarkTheme()
+                val systemController = rememberSystemUiController()
 
-				SideEffect {
-					systemController.setSystemBarsColor(
-						color = Color.Transparent,
-						darkIcons = !isSystemInDarkMode
-					)
-				}
+                SideEffect {
+                    systemController.setSystemBarsColor(
+                        color = Color.Transparent,
+                        darkIcons = !isSystemInDarkMode
+                    )
+                }
 
-				Surface(
-					modifier = Modifier.fillMaxSize(),
-					color = MaterialTheme.colorScheme.background
-				) {
-
-				}
-			}
-		}
-	}
+                MainView(viewModel = viewModel)
+            }
+        }
+    }
 }

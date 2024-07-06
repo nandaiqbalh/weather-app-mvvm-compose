@@ -2,14 +2,12 @@ package com.nandaiqbalh.weatherapp.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Black = Color(0xFF1C1E21) //Dark Background
-val Blue = Color(0xFF1877F2) //Primary
+// Dark color palette
+val Black = Color(0xFF1A1A1A)
+val BlueDark = Color(0xFF1976D2)
+val DarkRed = Color(0xFFB00020)
+val DarkGray = Color(0xFF333333)
 
-val DarkRed = Color(0xFFC30052) //Dark Error
-val LightRed = Color(0xFFFF84B7)
-
-val LightBlack = Color(0xFF3A3B3C) //Dark Surface
-
-
-val BlueGray = Color(0xFFA0A3BD)
-val WhiteGray = Color(0xFFB0B3B8)
+// Light color palette
+val BlueLight = Color(0xFF2196F3)
+val LightRed = Color(0xFFEF5350)

@@ -1,9 +1,7 @@
 package com.nandaiqbalh.weatherapp.domain.models
 
-import java.time.LocalDate
-
 data class WeatherInfo(
-    val weatherDataPerDay: Map<LocalDate, List<WeatherData>>,
-    val hourlyWeatherData: Map<LocalDate, List<WeatherData>>,
-    val currentWeatherData: WeatherData?
+    val weatherDataPerDay: Map<Int, List<WeatherDataPerHour>>,
+    val weatherDataPerWeek: Map<Int, List<WeatherDataPerWeek>>,
+    val currentWeatherData: WeatherDataPerHour?
 )
