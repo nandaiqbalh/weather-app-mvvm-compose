@@ -23,25 +23,24 @@ private data class IndexedWeatherDataPerWeek(
 )
 
 fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherDataPerHour>> {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        throw UnsupportedOperationException("This feature requires API level 26 or higher")
+    }
     return time.mapIndexed { index, time ->
         val temperature = temperatures[index]
         val weatherCode = weatherCodes[index]
         val pressure = pressures[index]
         val humidity = humidities[index]
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            IndexedWeatherData(
-                index = index,
-                data = WeatherDataPerHour(
-                    time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
-                    temperatureCelsius = temperature,
-                    pressure = pressure,
-                    humidity = humidity,
-                    weatherType = WeatherType.fromWMO(weatherCode)
-                )
+        IndexedWeatherData(
+            index = index,
+            data = WeatherDataPerHour(
+                time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
+                temperatureCelsius = temperature,
+                pressure = pressure,
+                humidity = humidity,
+                weatherType = WeatherType.fromWMO(weatherCode)
             )
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
+        )
     }.groupBy {
         it.index / 24
     }.mapValues { it ->
@@ -50,17 +49,16 @@ fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherDataPerHour>> {
 }
 
 fun WeatherDataDto.toWeatherDataPerWeek(): Map<Int, List<WeatherDataPerWeek>> {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        throw UnsupportedOperationException("This feature requires API level 26 or higher")
+    }
     return time.mapIndexed { index, time ->
         val temperature = temperatures[index]
         val weatherCode = weatherCodes[index]
         val pressure = pressures[index]
         val humidity = humidities[index]
 
-        val localDateTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME)
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
+        val localDateTime = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME)
 
         IndexedWeatherDataPerWeek(
             index = index,
@@ -74,29 +72,23 @@ fun WeatherDataDto.toWeatherDataPerWeek(): Map<Int, List<WeatherDataPerWeek>> {
         )
     }.groupBy {
         val localDateTime = it.data.time
-        val weekFields = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            WeekFields.of(Locale.getDefault())
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
-        val weekOfYear = localDateTime.get(weekFields.weekOfYear())
-        weekOfYear
+        val weekFields = WeekFields.of(Locale.getDefault())
+        localDateTime.get(weekFields.weekOfYear())
     }.mapValues {
-        it.value.distinctBy { it.data.time.toLocalDate() } // Menggunakan distinctBy untuk mempertahankan satu baris data per tanggal unik
+        it.value.distinctBy { it.data.time.toLocalDate() } // Using distinctBy to maintain one row of unique data per date
             .map { it.data }
     }
 }
 
 fun WeatherResponse.toWeatherInfo(): WeatherInfo {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        throw UnsupportedOperationException("This feature requires API level 26 or higher")
+    }
     val weatherDataMap = weatherData.toWeatherDataMap()
     val weatherDataPerWeek = weatherData.toWeatherDataPerWeek()
-    val now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        LocalDateTime.now()
-    } else {
-        TODO("VERSION.SDK_INT < O")
-    }
+    val now = LocalDateTime.now()
     val currentWeatherData = weatherDataMap[0]?.find {
-        val hour = if(now.minute < 30) now.hour else now.hour + 1
+        val hour = if (now.minute < 30) now.hour else now.hour + 1
         it.time.hour == hour
     }
     return WeatherInfo(

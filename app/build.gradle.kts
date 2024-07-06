@@ -53,6 +53,8 @@ android {
 
 	testOptions {
 		unitTests.isIncludeAndroidResources = true
+		unitTests.isReturnDefaultValues = true
+
 	}
 }
 
@@ -128,6 +130,17 @@ dependencies {
 
 	testImplementation("org.robolectric:robolectric:4.5.1")
 	testImplementation("org.robolectric:shadows-framework:4.9.2")
+	testImplementation ("org.robolectric:shadows-playservices:3.6.1")
 
+	testImplementation("org.powermock:powermock-module-junit4:2.0.9")
+	testImplementation("org.powermock:powermock-api-mockito2:2.0.9")
+
+	val compose_version = "1.6.0-alpha08"
+	implementation("androidx.compose.ui:ui-test-junit4:1.6.0-alpha08")
+	androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.0-alpha08")
+// Test rules and transitive dependencies:
+	androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
+// Needed for createComposeRule(), but not for createAndroidComposeRule<YourActivity>():
+	debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
 
 }

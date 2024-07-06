@@ -2,15 +2,13 @@ package com.nandaiqbalh.weatherapp.domain.repository
 
 import com.nandaiqbalh.weatherapp.domain.models.WeatherInfo
 import com.nandaiqbalh.weatherapp.domain.util.Resource
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import retrofit2.HttpException
-import java.io.IOException
 
 class WeatherRepositoryTest {
 
@@ -19,11 +17,11 @@ class WeatherRepositoryTest {
 
 	@Before
 	fun setup() {
-		MockitoAnnotations.initMocks(this)
+		MockitoAnnotations.openMocks(this)
 	}
 
 	@Test
-	fun `getWeatherForecast success returns Resource Success with WeatherInfo`() = runBlocking {
+	fun `getWeatherForecast success returns Resource Success with WeatherInfo`() = runTest {
 		// Mock response from repository
 		val lat = 12.34
 		val long = 56.78
@@ -32,54 +30,66 @@ class WeatherRepositoryTest {
 			weatherDataPerWeek = emptyMap(),
 			currentWeatherData = null
 		)
-		`when`(mockRepository.getWeatherForecast(lat, long)).thenReturn(Resource.Success(mockWeatherInfo))
+		val expectedResource = Resource.Success(mockWeatherInfo)
+
+		`when`(mockRepository.getWeatherForecast(lat, long)).thenReturn(expectedResource)
 
 		// Call repository method
 		val result = mockRepository.getWeatherForecast(lat, long)
 
 		// Assert result
-		assertEquals(Resource.Success(mockWeatherInfo), result)
+		assertEquals(expectedResource, result)
 	}
 
 	@Test
-	fun `getWeatherForecast network error returns Resource Error`() = runBlocking {
+	fun `getWeatherForecast network error returns Resource Error`() = runTest {
 		// Mock network error from repository
 		val lat = 12.34
 		val long = 56.78
-		`when`(mockRepository.getWeatherForecast(lat, long)).thenReturn(Resource.Error("Network error", null))
+		val errorMessage =
+			"There was a problem with your network connection. Please check your internet connection and try again."
+		val expectedResource = Resource.Error<WeatherInfo>(errorMessage, null)
+
+		`when`(mockRepository.getWeatherForecast(lat, long)).thenReturn(expectedResource)
 
 		// Call repository method
 		val result = mockRepository.getWeatherForecast(lat, long)
 
 		// Assert result
-		assertEquals(Resource.Error("Network error", null), result)
+		assertEquals(expectedResource, result)
 	}
 
 	@Test
-	fun `getWeatherForecast server error returns Resource Error`() = runBlocking {
+	fun `getWeatherForecast server error returns Resource Error`() = runTest {
 		// Mock server error from repository
 		val lat = 12.34
 		val long = 56.78
-		`when`(mockRepository.getWeatherForecast(lat, long)).thenReturn(Resource.Error("Server error", null))
+		val errorMessage = "There was an unexpected server error. Please try again later."
+		val expectedResource = Resource.Error<WeatherInfo>(errorMessage, null)
+
+		`when`(mockRepository.getWeatherForecast(lat, long)).thenReturn(expectedResource)
 
 		// Call repository method
 		val result = mockRepository.getWeatherForecast(lat, long)
 
 		// Assert result
-		assertEquals(Resource.Error("Server error", null), result)
+		assertEquals(expectedResource, result)
 	}
 
 	@Test
-	fun `getWeatherForecast unexpected error returns Resource Error`() = runBlocking {
+	fun `getWeatherForecast unexpected error returns Resource Error`() = runTest {
 		// Mock unexpected error from repository
 		val lat = 12.34
 		val long = 56.78
-		`when`(mockRepository.getWeatherForecast(lat, long)).thenReturn(Resource.Error("Unexpected error", null))
+		val errorMessage = "An unexpected error occurred. Please try again later."
+		val expectedResource = Resource.Error<WeatherInfo>(errorMessage, null)
+
+		`when`(mockRepository.getWeatherForecast(lat, long)).thenReturn(expectedResource)
 
 		// Call repository method
 		val result = mockRepository.getWeatherForecast(lat, long)
 
 		// Assert result
-		assertEquals(Resource.Error("Unexpected error", null), result)
+		assertEquals(expectedResource, result)
 	}
 }
