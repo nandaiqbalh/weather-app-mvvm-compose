@@ -30,5 +30,6 @@ Project ini dibangun menggunakan beberapa tools & teknologi seperti yang ada di 
 2. The last one! Bulid the app. **And well done ~**
 
 ## Demo ✨
+https://github.com/nandaiqbalh/weather-app-mvvm-compose/assets/70440045/93608149-f160-49b4-9a35-6f0b4e3b741f
 
 
